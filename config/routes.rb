@@ -1,4 +1,18 @@
 Rails.application.routes.draw do
+  root "root#search" #トップページ(検索フォーム等)
+  devise_for :users, controllers: { registrations: 'users/registrations' }
+
+  resources :rooms, only: [:index, :show, :new, :create] do
+    collection do
+      get :search
+    end
+  end
+
+  resource :reservations, only: [:index, :create] do
+    collection do
+      post :confirmable
+    end
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
