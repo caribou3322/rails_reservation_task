@@ -1,0 +1,4 @@
+<%= reservation.checkin_at.strftime("%Y/%m/%d") %>
+<%= reservation.checkout_at.strftime("%Y/%m/%d") %>
+<%= reservation.created_at.strftime("%Y/%m/%d %H:%M") %>
+<%= number_to_currency(reservation.total_price, unit: "¥", precision: 0) %>
