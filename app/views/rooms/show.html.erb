@@ -1,0 +1,54 @@
+<h1><%= @room.name %></h1>
+
+<div>
+  <%= image_tag room_image(@room), size: "300x200" %>
+</div>
+
+<p><strong>住所：</strong><%= @room.address %></p>
+<p><strong>施設詳細：</strong><%= @room.description %></p>
+<p><strong>宿泊料金：</strong><%= number_to_currency(@room.price, unit: "¥", precision: 0) %> / 泊</p>
+
+<hr>
+
+<h2>この施設を予約する</h2>
+
+<% if user_signed_in? %>
+  <%# エラーメッセージ表示 %>
+  <% if @reservation.errors.any? %>
+    <div style="color: red;">
+      <ul>
+        <% @reservation.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%# 予約確認画面（confirm_reservations_path）へデータを送信 %>
+  <%= form_with model: @reservation, url: confirm_reservations_path, method: :post, local: true, data: { turbo: false } do |f| %>
+    <%= f.hidden_field :room_id, value: @room.id %>
+
+    <div>
+      <%= f.label :check_in, "チェックイン日" %><br>
+      <%= f.date_field :check_in %>
+    </div>
+
+    <div>
+      <%= f.label :check_out, "チェックアウト日" %><br>
+      <%= f.date_field :check_out %>
+    </div>
+
+    <div>
+      <%= f.label :guests, "人数" %><br>
+      <%= f.number_field :guests, min: 1 %> 人
+    </div>
+
+    <br>
+    <%= f.submit "確認画面へ進む" %>
+  <% end %>
+<% else %>
+  <p>予約するには<%= link_to "ログイン", new_user_session_path %>が必要です。</p>
+<% end %>
+
+<br>
+<%= link_to "施設一覧へ戻る", rooms_path %>
