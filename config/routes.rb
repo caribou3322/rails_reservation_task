@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root "root#search" #トップページ(検索フォーム等)
+  root "rooms#search" #トップページ(検索フォーム等)
   devise_for :users, controllers: { registrations: 'users/registrations' }
 
   resources :rooms, only: [:index, :show, :new, :create] do
