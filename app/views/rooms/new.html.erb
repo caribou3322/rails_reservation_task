@@ -1,0 +1,43 @@
+<h1>施設新規登録</h1>
+
+<%# エラーメッセージの表示 %>
+<% if @room.errors.any? %>
+  <div style="color: red;">
+    <ul>
+      <% @room.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @room, local: true do |f| %>
+  <div>
+    <%= f.label :name, "施設名" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :description, "施設詳細" %><br>
+    <%= f.text_area :description %>
+  </div>
+
+  <div>
+    <%= f.label :price, "宿泊料金（1泊あたり）" %><br>
+    <%= f.number_field :price, min: 1 %> 円
+  </div>
+
+  <div>
+    <%= f.label :address, "住所" %><br>
+    <%= f.text_field :address, placeholder: "例：東京都新宿区..." %>
+  </div>
+
+  <div>
+    <%= f.label :image, "施設画像" %><br>
+    <%= f.file_field :image %>
+  </div>
+
+  <div>
+    <%= f.submit "登録する" %>
+  </div>
+<% end %>

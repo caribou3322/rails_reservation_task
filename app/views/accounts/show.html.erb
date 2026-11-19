@@ -1,0 +1,11 @@
+<h1>アカウント</h1>
+
+<div>
+  <p><strong>メールアドレス：</strong><%= @user.email %></p>
+  <p><strong>パスワード：</strong>*********</p>
+</div>
+
+<div>
+  <%= link_to "アカウント編集", edit_account_path %> |
+  <%= link_to "プロフィール編集", edit_profile_path %>
+</div>

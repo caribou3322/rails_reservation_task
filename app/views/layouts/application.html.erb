@@ -15,9 +15,120 @@
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <style>
+      .site-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 8px 12px;
+      }
+      .header-nav {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .header-nav a {
+        white-space: nowrap;
+      }
+      .user-dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .user-dropdown__trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: transparent;
+        border: 1px solid #ccc;
+        border-radius: 9999px;
+        padding: 4px 10px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .user-dropdown__avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .user-dropdown__menu[hidden] {
+        display: none;
+      }
+      
+      .user-dropdown__menu {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 6px);
+        min-width: 160px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        padding: 6px 0;
+      }
+      .user-dropdown__menu a {
+        padding: 8px 14px;
+        text-decoration: none;
+        color: inherit;
+        white-space: nowrap;
+      }
+      .user-dropdown__menu a:hover {
+        background: #f5f5f5;
+      }
+    </style>
   </head>
 
   <body>
+    <header class="site-header">
+      <% if user_signed_in? %>
+        <nav class="header-nav">
+          <%= link_to "トップ（検索）", root_path %>
+          <%= link_to "施設新規登録", new_room_path %>
+          <%= link_to "登録済み施設一覧", rooms_path %>
+          <%= link_to "予約済み一覧", reservations_path %>
+        </nav>
+
+        <div class="user-dropdown" data-controller="dropdown">
+          <button type="button"
+                  class="user-dropdown__trigger"
+                  data-action="click->dropdown#toggle"
+                  aria-expanded="false">
+            <% if current_user.respond_to?(:avatar) && current_user.avatar.attached? %>
+              <%= image_tag current_user.avatar, class: "user-dropdown__avatar", alt: "アイコン" %>
+            <% else %>
+              <%= image_tag "default_avatar.png", class: "user-dropdown__avatar", alt: "デフォルトアイコン" %>
+            <% end %>
+            <span><%= current_user.name.presence || current_user.email %></span>
+          </button>
+
+          <div class="user-dropdown__menu" data-dropdown-target="menu" hidden>
+            <%= link_to "アカウント", account_path %>
+            <%= link_to "プロフィール編集", edit_profile_path %>
+            <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %>
+          </div>
+        </div>
+      <% else %>
+        <nav class="header-nav">
+          <%= link_to "トップ（検索）", root_path %>
+          <%= link_to "新規登録", new_user_registration_path %>
+          <%= link_to "ログイン", new_user_session_path %>
+        </nav>
+      <% end %>
+    </header>
+    <hr>
+
+    <%# フラッシュメッセージ表示 %>
+    <p style="color: green;"><%= notice %></p>
+    <p style="color: red;"><%= alert %></p>
+
     <%= yield %>
   </body>
 </html>

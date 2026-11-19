@@ -4,6 +4,10 @@ module ApplicationHelper
   end
 
   def room_image(room)
-    room.image.attached? ? room.image : "default_user.png"
+    if room.respond_to?(:image) && room.image.attached?
+      room.image
+    else
+      "default_room.png"
+    end
   end
 end

@@ -2,7 +2,7 @@ class ReservationsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @reservations = current_user.reservations.includes(:room).order(created_at: :desc)
+    @reservations = Reservation.includes(:room).order(created_at: :desc)
   end
 
   def confirm
@@ -29,6 +29,6 @@ class ReservationsController < ApplicationController
   private
 
   def reservation_params
-    params. require(:reservation).permit(:room_id, :checkin_at, :checkout_at, :guest_count)
+    params. require(:reservation).permit(:room_id, :check_in, :check_out, :guests)
   end
 end

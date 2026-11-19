@@ -20,6 +20,6 @@ ja:
         address: 住所
         image: 施設画像
       reservation:
-        checkin_at: チェックイン日
-        checkout_at: チェックアウト日
-        guest_count: 人数
+        check_in: チェックイン日
+        check_out: チェックアウト日
+        guests: 人数

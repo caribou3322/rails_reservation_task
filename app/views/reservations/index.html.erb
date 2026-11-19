@@ -1,4 +1,44 @@
-<%= reservation.checkin_at.strftime("%Y/%m/%d") %>
-<%= reservation.checkout_at.strftime("%Y/%m/%d") %>
-<%= reservation.created_at.strftime("%Y/%m/%d %H:%M") %>
-<%= number_to_currency(reservation.total_price, unit: "¥", precision: 0) %>
+<% if notice.present? %>
+  <p class="notice"><%= notice %></p>
+<% end %>
+
+<h2>予約済み一覧</h2>
+
+<div style="overflow-x: auto;">
+  <table>
+    <thead>
+      <tr>
+        <th style="white-space: nowrap;">施設画像</th>
+        <th style="white-space: nowrap;">施設名</th>
+        <th style="white-space: nowrap;">紹介文</th>
+        <th style="white-space: nowrap;">チェックイン日</th>
+        <th style="white-space: nowrap;">チェックアウト日</th>
+        <th style="white-space: nowrap;">予約確定日時</th>
+        <th style="white-space: nowrap;">合計料金</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @reservations.each do |reservation| %>
+        <tr>
+          <td>
+            <% if reservation.room.respond_to?(:image) && reservation.room.image.attached? %>
+              <%= image_tag reservation.room.image, size: "120x80", style: "object-fit: cover;", alt: reservation.room.name %>
+            <% else %>
+              <%= image_tag "default_room.png", size: "120x80", alt: "デフォルト施設画像" %>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to reservation.room.name, room_path(reservation.room) %>
+          </td>
+          <td>
+            <%= reservation.room.description %>
+          </td>
+          <td style="white-space: nowrap;"><%= reservation.check_in.strftime("%Y/%m/%d") %></td>
+          <td style="white-space: nowrap;"><%= reservation.check_out.strftime("%Y/%m/%d") %></td>
+          <td style="white-space: nowrap;"><%= reservation.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+          <td style="white-space: nowrap;"><%= number_to_currency(reservation.total_price, unit: "¥", precision: 0, format: "%u%n") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
