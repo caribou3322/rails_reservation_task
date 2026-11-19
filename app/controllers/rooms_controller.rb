@@ -1,4 +1,4 @@
-class RoomController < ApplicationController
+class RoomsController < ApplicationController
   before_action :authenticate_user!, only: [:index, :new, :create]
 
   # 自分が作成した施設のみ
