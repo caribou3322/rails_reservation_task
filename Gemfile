@@ -56,3 +56,6 @@ group :test do
   gem "selenium-webdriver"
 end
 gem "devise"
+gem 'rails-i18n'
+gem 'devise-i18n'
+gem "json", "< 3.0"
